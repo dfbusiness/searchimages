@@ -1,0 +1,39 @@
+# Configuração padrão da ferramenta SearchImages
+# Ajuste apenas quando a sua planilha de entrada tiver colunas diferentes.
+
+input:
+  excel_path: "dados/MEMORIA DE CALCULO.xlsx"
+  pdf_path: "dados/TR 21 HXI - Material apoio.pdf"  # opcional
+  sheet_name: "Planilha1"
+  first_data_row: 5
+  last_data_row: 55
+
+columns:
+  item: "A"                  # Produto 1, Produto 2 etc. Se vier vazio, usa a numeração sequencial.
+  description_memory: "B"    # descrição da memória de cálculo
+  quantity: "F"
+  unit_price: "S"            # valor unitário final/arredondado
+  total_price: "T"           # opcional; a ferramenta calcula novamente na saída
+  url: "U"
+
+pdf_table:
+  enabled: true
+  # Para o TR HXI, a ferramenta tenta extrair Item, Descrição, Unidade e Qtde do PDF.
+  # Se não conseguir, usa os dados da planilha de entrada.
+
+output:
+  workbook_path: "outputs/Planilha_TR_HXI_21_Material_Apoio_CORRIGIDA.xlsx"
+  images_dir: "outputs/imagens"
+  log_csv: "outputs/log_execucao.csv"
+  image_max_height_cm: 3.0
+  create_sources_sheet: true
+  add_hyperlinks: true
+
+behavior:
+  prefer_mercadolivre_api: true
+  use_playwright_fallback: true
+  headless: false              # false ajuda a resolver bloqueios/captcha manualmente se necessário
+  timeout_ms: 45000
+  screenshot_fallback: true     # se não conseguir baixar imagem, recorta/captura a imagem principal visível
+  never_use_generic_images: true
+  leave_blank_when_uncertain: true
