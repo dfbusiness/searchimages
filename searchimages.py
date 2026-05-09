@@ -298,7 +298,7 @@ def merge_pdf_data(rows: List[ProductRow], config: Dict[str, Any]) -> List[Produ
         logging.warning("Não foi possível extrair tabela do PDF. Usando descrições da memória de cálculo.")
         return rows
 
-    for row in rows:
+    for idx, row in enumerate(rows):
         if row.item in pdf_data:
             desc, unit, qty = pdf_data[row.item]
             row.description = desc
@@ -574,7 +574,11 @@ def capture_all_images(rows: List[ProductRow], config: Dict[str, Any]) -> List[C
                 result = mercadolivre_api_capture(row, images_dir)
                 if result and result.status == "OK":
                     results.append(result)
-                    continue
+                 if delay_seconds > 0 and idx < len(rows) - 1:
+                 logging.info("Aguardando %s segundos antes do próximo item", delay_seconds)
+                 time.sleep(delay_seconds)
+                 continue
+                 
                 # Mantém observação da API, mas tenta visual.
                 previous_obs = result.observations if result else ""
             else:
